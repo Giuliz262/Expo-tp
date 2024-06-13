@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, A
 import { Icon } from 'react-native-elements';
 import backgroundImage from '../assets/images/background.jpg';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ const LoginScreen = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const router = useRouter();
 
   const handleLogin = () => {
     setUsernameError('');
@@ -18,13 +20,13 @@ const LoginScreen = () => {
     let hasError = false;
 
     if (username.length < 5 || username.length > 10) {
-      setUsernameError('El nombre de Usuario debe tener entre 5 y 10 caracteres.');
+      setUsernameError('El nombre de usuario debe tener entre 5 y 10 caracteres.');
       hasError = true;
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
     if (!passwordRegex.test(password)) {
-      setPasswordError('La contraseña no debe ser menor de 5 caracteres. Debe contener por lo menos una letra mayúscula, una minúscula y un símbolo.');
+      setPasswordError('La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un símbolo.');
       hasError = true;
     }
 
@@ -32,14 +34,18 @@ const LoginScreen = () => {
       return;
     }
 
-    Alert.alert('Success', 'Login successful!');
+    Alert.alert('Éxito', 'Inicio de sesión exitoso!', [
+      {
+        text: 'OK',
+        onPress: () => {
+          router.push('/home');
+        }
+      }
+    ]);
   };
 
   return (
-    <ImageBackground
-      source={backgroundImage}
-      style={styles.background}
-    >
+    <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
         <Text style={styles.titulo}>Login</Text>
 
